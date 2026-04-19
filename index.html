@@ -329,14 +329,79 @@
     text-align: center;
   }
 
-  /* Keyboard hint */
-  .hint {
-    position: relative;
-    z-index: 1;
-    margin-top: 12px;
-    color: rgba(255,150,150,0.4);
-    font-size: 0.72rem;
-    letter-spacing: 2px;
+  /* ── Mobile responsive ── */
+  @media (max-width: 800px) {
+    body {
+      justify-content: flex-start;
+      padding: 20px 0 0;
+      overflow-y: auto;
+    }
+
+    .book-container {
+      width: 92vw;
+      max-width: 420px;
+      height: calc(92vw * 1.36);
+      max-height: 572px;
+    }
+
+    /* Hide left panel and spine on mobile — single page view */
+    .page-left,
+    .spine,
+    .pages-stack {
+      display: none;
+    }
+
+    .book {
+      justify-content: center;
+    }
+
+    .page-right {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+
+    .flip-overlay {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    .book-shadow {
+      width: 80%;
+    }
+
+    .cover-title {
+      font-size: 2rem;
+    }
+
+    .cover-subtitle {
+      font-size: 0.85rem;
+    }
+
+    .last-page-text {
+      font-size: 1.25rem;
+    }
+
+    .controls {
+      margin-top: 20px;
+      gap: 18px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 1rem;
+    }
+
+    .progress {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .cover-title { font-size: 1.6rem; }
+    .btn { padding: 10px 18px; font-size: 0.9rem; }
   }
 </style>
 </head>
@@ -478,6 +543,14 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') changePage(1);
   if (e.key === 'ArrowLeft')  changePage(-1);
 });
+
+// Touch swipe support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) changePage(dx < 0 ? 1 : -1);
+}, { passive: true });
 
 // Generate floating hearts
 (function() {
