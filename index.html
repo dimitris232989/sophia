@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My babyyy! 💕</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a0a0f;
+    background-image: radial-gradient(ellipse at 20% 50%, #3d1a2a 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, #2a0d1a 0%, transparent 50%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* Floating hearts background */
+  .hearts-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .heart-particle {
+    position: absolute;
+    bottom: -50px;
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: floatHeart linear infinite;
+  }
+  @keyframes floatHeart {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+  }
+
+  /* Book scene */
+  .scene {
+    position: relative;
+    z-index: 1;
+    perspective: 2000px;
+  }
+
+  .book-container {
+    position: relative;
+    width: 760px;
+    height: 520px;
+  }
+
+  /* Shadow under book */
+  .book-shadow {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 680px;
+    height: 30px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.7) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  /* Pages stack hint */
+  .pages-stack {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 370px;
+    height: 512px;
+    background: linear-gradient(to right, #e8d5c0, #f5ede3);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.3);
+  }
+
+  /* The book itself: two panels side by side */
+  .book {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+
+  /* Left (back) panel */
+  .page-left {
+    width: 380px;
+    height: 520px;
+    background: linear-gradient(135deg, #2d1020 0%, #4a1a30 100%);
+    border-radius: 6px 0 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: inset -4px 0 12px rgba(0,0,0,0.5), -4px 0 20px rgba(0,0,0,0.4);
+    position: relative;
+  }
+
+  .page-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;
+    filter: blur(2px);
+  }
+
+  .page-left .back-label {
+    position: absolute;
+    color: rgba(255,200,200,0.3);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* Right (current) panel */
+  .page-right {
+    width: 380px;
+    height: 520px;
+    background: #fff;
+    border-radius: 0 6px 6px 0;
+    overflow: hidden;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.5), inset 4px 0 10px rgba(0,0,0,0.08);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Cover page */
+  .cover-page {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #6b1a30 0%, #c0395a 40%, #e8607a 70%, #f5a0b0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  .cover-title {
+    color: #fff;
+    font-size: 2.6rem;
+    font-weight: bold;
+    text-shadow: 2px 3px 10px rgba(0,0,0,0.4);
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .cover-heart {
+    font-size: 3rem;
+    animation: pulse 1.5s ease-in-out infinite;
+    margin-bottom: 12px;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .cover-subtitle {
+    color: rgba(255,255,255,0.8);
+    font-size: 1rem;
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+
+  .cover-decoration {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 1.2rem;
+    opacity: 0.5;
+  }
+
+  /* Photo page */
+  .photo-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f3f0;
+    position: relative;
+  }
+
+  .photo-page img {
+    max-width: 92%;
+    max-height: 88%;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    font-size: 0.72rem;
+    color: #c9a0a0;
+    letter-spacing: 1px;
+  }
+
+  /* Last page */
+  .last-page {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #6b1a30 0%, #c0395a 50%, #f5a0b0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  .last-page-text {
+    color: #fff;
+    font-size: 1.6rem;
+    text-align: center;
+    text-shadow: 1px 2px 8px rgba(0,0,0,0.4);
+    line-height: 1.6;
+  }
+
+  .last-page-hearts {
+    font-size: 2.5rem;
+    margin-top: 16px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Flip animation overlay */
+  .flip-overlay {
+    position: absolute;
+    top: 0;
+    width: 380px;
+    height: 520px;
+    pointer-events: none;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    display: none;
+  }
+
+  .flip-overlay.flipping-forward {
+    right: 0;
+    left: auto;
+    transform-origin: left center;
+    animation: flipForward 0.5s ease-in-out forwards;
+  }
+
+  .flip-overlay.flipping-back {
+    left: 0;
+    right: auto;
+    transform-origin: right center;
+    animation: flipBack 0.5s ease-in-out forwards;
+  }
+
+  @keyframes flipForward {
+    0%   { transform: rotateY(0deg); background: rgba(240,210,210,0.8); border-radius: 0 6px 6px 0; }
+    50%  { transform: rotateY(-90deg); background: rgba(200,160,160,0.9); border-radius: 0; }
+    100% { transform: rotateY(-180deg); background: rgba(240,210,210,0); border-radius: 6px 0 0 6px; }
+  }
+
+  @keyframes flipBack {
+    0%   { transform: rotateY(0deg); background: rgba(240,210,210,0.8); border-radius: 6px 0 0 6px; }
+    50%  { transform: rotateY(90deg); background: rgba(200,160,160,0.9); border-radius: 0; }
+    100% { transform: rotateY(180deg); background: rgba(240,210,210,0); border-radius: 0 6px 6px 0; }
+  }
+
+  /* Spine */
+  .spine {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 520px;
+    background: linear-gradient(to right, #3d1020, #6b1a30, #3d1020);
+    z-index: 10;
+    box-shadow: 0 0 8px rgba(0,0,0,0.6);
+  }
+
+  /* Controls */
+  .controls {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-top: 28px;
+  }
+
+  .btn {
+    background: rgba(180, 60, 90, 0.7);
+    border: 1.5px solid rgba(255,150,170,0.4);
+    color: #fff;
+    padding: 10px 28px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    backdrop-filter: blur(6px);
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    background: rgba(200, 80, 110, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(200,80,110,0.4);
+  }
+
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+    transform: none;
+  }
+
+  .progress {
+    color: rgba(255,180,180,0.8);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  /* Keyboard hint */
+  .hint {
+    position: relative;
+    z-index: 1;
+    margin-top: 12px;
+    color: rgba(255,150,150,0.4);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating hearts -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="scene">
+  <div class="book-container">
+    <div class="pages-stack"></div>
+
+    <div class="book" id="book">
+      <!-- Left panel (shows previous photo dimmed) -->
+      <div class="page-left" id="pageLeft">
+        <div class="back-label">✦</div>
+      </div>
+
+      <!-- Spine -->
+      <div class="spine"></div>
+
+      <!-- Right panel (current page) -->
+      <div class="page-right" id="pageRight"></div>
+    </div>
+
+    <!-- Flip animation overlay -->
+    <div class="flip-overlay" id="flipOverlay"></div>
+
+    <div class="book-shadow"></div>
+  </div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="btn" id="btnPrev" onclick="changePage(-1)">← Prev</button>
+  <span class="progress" id="progress">Cover</span>
+  <button class="btn" id="btnNext" onclick="changePage(1)">Next →</button>
+</div>
+
+
+<script>
+const images = [
+  "images/IMG_7321.JPG","images/IMG_7322.PNG","images/IMG_7323.PNG",
+  "images/IMG_7324.PNG","images/IMG_7325.PNG","images/IMG_7326.PNG",
+  "images/IMG_7327.PNG","images/IMG_7328.PNG","images/IMG_7329.PNG",
+  "images/IMG_7330.PNG","images/IMG_7331.PNG","images/IMG_7332.PNG",
+  "images/IMG_7333.PNG","images/IMG_7334.PNG","images/IMG_7335.PNG",
+  "images/IMG_7336.PNG","images/IMG_7337.PNG","images/IMG_7338.PNG",
+  "images/IMG_7339.PNG","images/IMG_7340.PNG","images/IMG_7341.PNG",
+  "images/IMG_7342.PNG","images/IMG_7343.PNG","images/IMG_7344.PNG",
+  "images/IMG_7345.PNG","images/IMG_7346.PNG","images/IMG_7347.PNG",
+  "images/IMG_7348.PNG","images/IMG_7349.PNG","images/IMG_7350.PNG",
+  "images/IMG_7351.PNG","images/IMG_7352.PNG","images/IMG_7353.PNG",
+  "images/IMG_7354.PNG","images/IMG_7355.PNG","images/IMG_7356.PNG",
+  "images/IMG_7357.PNG","images/IMG_7358.PNG","images/IMG_7359.PNG",
+  "images/IMG_7360.PNG","images/IMG_7361.PNG","images/IMG_7362.PNG",
+  "images/IMG_7363.PNG","images/IMG_7364.PNG","images/IMG_7365.PNG",
+  "images/IMG_7366.PNG","images/IMG_7367.PNG","images/IMG_7368.PNG",
+  "images/IMG_7370.PNG","images/IMG_7371.PNG","images/IMG_7372.PNG",
+  "images/IMG_7373.PNG"
+];
+
+// Pages: 0 = cover, 1..N = photos, N+1 = last page
+const TOTAL = images.length + 2; // cover + photos + end
+let current = 0;
+let animating = false;
+
+function renderPage(index) {
+  const right = document.getElementById('pageRight');
+  const left  = document.getElementById('pageLeft');
+
+  // Right panel
+  right.innerHTML = '';
+  if (index === 0) {
+    // Cover
+    right.innerHTML = `
+      <div class="cover-page">
+        <span class="cover-decoration">✦ ✦ ✦</span>
+        <div class="cover-heart">💕</div>
+        <div class="cover-title">My babyyy!</div>
+        <div class="cover-subtitle">— for Sophia, with all my love —</div>
+      </div>`;
+  } else if (index === TOTAL - 1) {
+    // Last page
+    right.innerHTML = `
+      <div class="last-page">
+        <div class="last-page-text">Every photo holds<br>a piece of my heart.<br><br>I love you, Sophia. 💕</div>
+        <div class="last-page-hearts">🌹💕🌹</div>
+      </div>`;
+  } else {
+    // Photo page
+    const imgSrc = images[index - 1];
+    right.innerHTML = `
+      <div class="photo-page">
+        <img src="${imgSrc}" alt="Photo ${index}" />
+        <span class="page-number">${index} / ${images.length}</span>
+      </div>`;
+  }
+
+  // Left panel: show previous photo dimly
+  left.innerHTML = '';
+  if (index > 1 && index < TOTAL) {
+    const prevImg = images[index - 2];
+    if (prevImg) {
+      left.innerHTML = `<img src="${prevImg}" alt="" />`;
+    }
+  }
+
+  // Update progress
+  const prog = document.getElementById('progress');
+  if (index === 0) prog.textContent = 'Cover';
+  else if (index === TOTAL - 1) prog.textContent = 'The End';
+  else prog.textContent = `${index} / ${images.length}`;
+
+  document.getElementById('btnPrev').disabled = index === 0;
+  document.getElementById('btnNext').disabled = index === TOTAL - 1;
+}
+
+function changePage(dir) {
+  if (animating) return;
+  const next = current + dir;
+  if (next < 0 || next >= TOTAL) return;
+
+  animating = true;
+  const overlay = document.getElementById('flipOverlay');
+  overlay.className = 'flip-overlay ' + (dir > 0 ? 'flipping-forward' : 'flipping-back');
+  overlay.style.display = 'block';
+
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    overlay.className = 'flip-overlay';
+    current = next;
+    renderPage(current);
+    animating = false;
+  }, 480);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') changePage(1);
+  if (e.key === 'ArrowLeft')  changePage(-1);
+});
+
+// Generate floating hearts
+(function() {
+  const bg = document.getElementById('heartsBg');
+  const symbols = ['💕','♥','💗','💖','✦','💓'];
+  for (let i = 0; i < 22; i++) {
+    const h = document.createElement('span');
+    h.className = 'heart-particle';
+    h.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    h.style.left = Math.random() * 100 + '%';
+    h.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+    h.style.animationDuration = (8 + Math.random() * 12) + 's';
+    h.style.animationDelay = (Math.random() * 14) + 's';
+    bg.appendChild(h);
+  }
+})();
+
+// Init
+renderPage(0);
+</script>
+</body>
+</html>
